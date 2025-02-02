@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+use Database\Seeders\CitySeeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,5 +22,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'christian.ramires@example.com',
             'password' => Hash::make('password')
         ]);
+
+        $this->call(CitySeeder::class);
     }
 }
