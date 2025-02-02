@@ -4,17 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Get a JWT via given credentials.
@@ -23,9 +16,11 @@ class AuthController extends Controller
      */
     public function login()
     {
-        $credentials = request(['email', 'password']);
+        $credentials = request(key: ['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        $login_failed = !$token = auth()->attempt($credentials);
+        
+        if ($login_failed) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -37,8 +32,12 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function getMyUser()
     {
+        $user_is_unauthenticated = empty(auth()->user());
+        if ($user_is_unauthenticated) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
         return response()->json(auth()->user());
     }
 
