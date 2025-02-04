@@ -1,5 +1,7 @@
 # Teste técnico - Fácil consulta
 
+![2025-02-04_18-58](https://github.com/user-attachments/assets/b4493d5f-2cad-454c-8e2c-ad3dd87ce037)
+
 ## Sumário
 
 -   Instalação
