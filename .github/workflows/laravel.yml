@@ -2,19 +2,11 @@ name: Laravel
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  testing:
-    runs-on: ubuntu-latest
-    steps:
-      - run: 'echo "$TEST"'
-        shell: bash
-        env:
-          TEST: ${{secrets.DB_DATABASE}}
-        
   laravel-tests:
     runs-on: ubuntu-latest
 
@@ -29,31 +21,31 @@ jobs:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-    - uses: actions/checkout@v4
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.4'
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-    - name: Run Migrations
-      env:
-        DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-        DB_DATABASE: ${{ secrets.DB_DATABASE }}
-        DB_PORT: ${{ secrets.DB_PORT }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      run: php artisan migrate:fresh --seed
-    - name: Start Sail
-      env:
-        DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-        DB_DATABASE: ${{ secrets.DB_DATABASE }}
-        DB_PORT: ${{ secrets.DB_PORT }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        AUTH_GUARD: ${{ secrets.AUTH_GUARD }}
-        AUTH_PASSWORD_BROKER: ${{ secrets.AUTH_PASSWORD_BROKER }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      run: |
-        php artisan test
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: "8.4"
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Run Migrations
+        env:
+          DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: php artisan migrate:fresh --seed
+      - name: Start Sail
+        env:
+          DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          AUTH_GUARD: ${{ secrets.AUTH_GUARD }}
+          AUTH_PASSWORD_BROKER: ${{ secrets.AUTH_PASSWORD_BROKER }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          php artisan test
