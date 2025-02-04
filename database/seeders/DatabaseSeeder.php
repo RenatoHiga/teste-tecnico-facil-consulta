@@ -8,6 +8,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 use Database\Seeders\CitySeeder;
+use Database\Seeders\DoctorSeeder;
+use Database\Seeders\PatientSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,5 +26,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(CitySeeder::class);
+        $this->call(DoctorSeeder::class);
+        $this->call(PatientSeeder::class);
     }
 }
