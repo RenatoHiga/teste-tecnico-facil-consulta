@@ -38,12 +38,42 @@ class PatientApiTest extends TestCase
         $this->assertEquals('Luana Rodrigues Garcia', $result->nome);
     }
 
-    // public function test_get_patient(): void
-    // {
-    //     $patientController = new PatientController();
+    public function test_get_patients(): void
+    {
+        $patientController = new PatientController();
 
-    //     $result = json_decode($patientController->get(new Request([]))->getContent());
+        $result = json_decode($patientController->get(new Request([]), 1)->getContent());
 
-    //     $this->assertIsArray($result);
-    // }
+        $schedule_property_exists = (
+            isset($result[0]->consulta) 
+            && gettype($result[0]->consulta) == 'object'
+        );
+
+        $this->assertIsArray($result);
+        $this->assertTrue($schedule_property_exists);
+    }
+
+    public function test_get_patient_by_name(): void
+    {
+        $patientController = new PatientController();
+
+        $result = json_decode($patientController->get(new Request([
+            'nome' => 'Luana'
+        ]), 1)->getContent());
+
+        $this->assertEquals('Luana Rodrigues Garcia', $result[0]->nome);
+    }
+
+    public function test_get_patient_by_only_scheduled(): void
+    {
+        $patientController = new PatientController();
+
+        $result = json_decode($patientController->get(new Request([
+            'apenas-agendadas' => 'true'
+        ]), 1)->getContent());
+
+        $is_still_scheduled = strtotime('now') < strtotime($result[0]->consulta->data);
+
+        $this->assertTrue($is_still_scheduled);
+    }
 }

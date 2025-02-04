@@ -20,24 +20,23 @@ class PatientController extends Controller
                 'data', consulta.data,
                 'created_at', consulta.created_at,
                 'updated_at', consulta.updated_at,
-                'deleted-at', consulta.deleted_at
+                'deleted_at', consulta.deleted_at
             ) as consulta";
 
             $patients = new Patient();
             $patients = $patients->select(['paciente.*', DB::raw($json_consulta)]);
-
             $patients = $patients->join('consulta', 'paciente.id', '=', 'consulta.paciente_id');
             $patients = $patients->where('medico_id', $id_doctor);
             $patients = $patients->orderBy('consulta.data', 'ASC');
 
-            $has_only_scheduled_filter = !empty($only_scheduled);
+            $has_only_scheduled_filter = !empty($only_scheduled) && $only_scheduled == 'true';
             $has_name_filter = !empty($name);
             if ($has_only_scheduled_filter) {
-                $patients->where('consulta.data', '>', date('YYYY-mm-dd H:i:s'));
+                $patients->where('consulta.data', '>', date('Y-m-d H:i:s'));
             }
 
             if ($has_name_filter) {
-                $patients->whereLike('name', "%$name%");
+                $patients->whereLike('nome', "%$name%");
             }
 
             $patients = $patients->get();
@@ -45,13 +44,22 @@ class PatientController extends Controller
 
             foreach ($patients as $patient) {
                 $patient_decoded = $patient;
-                $patient_decoded->consulta = json_decode($patient_decoded->consulta);
+                $schedule_decoded = json_decode($patient_decoded->consulta);
+
+                $patient_decoded->consulta = (object)[
+                    'id' => $schedule_decoded->id,
+                    'medico_id' => $schedule_decoded->medico_id,
+                    'paciente_id' => $schedule_decoded->paciente_id,
+                    'data' => $schedule_decoded->data,
+                    'created_at' => $schedule_decoded->created_at,
+                    'updated_at' => $schedule_decoded->updated_at,
+                    'deleted_at' => $schedule_decoded->deleted_at,
+                ];
                 array_push($patients_decoded, $patient_decoded);
             }
 
             return response()->json($patients_decoded);
-
-        } catch (\Throwable $error) {dd($error);
+        } catch (\Throwable $error) {
             return showInternalError();
         }
     }
@@ -87,7 +95,6 @@ class PatientController extends Controller
     }
 
     public function update(Request $request, $id_patient) {
-
         try {
             $patient = Patient::find($id_patient);
             $patient->nome = $request->get('nome', $patient->nome);

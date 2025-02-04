@@ -69,4 +69,23 @@ class DoctorApiTest extends TestCase
 
         $this->assertTrue($is_doctor_from_id_city_one);
     }
+
+    public function test_create_schedule(): void {
+        $doctorController = new DoctorController();
+
+        $date = date('Y-m-d H:i:s', strtotime('+1 Hour'));
+        $result = json_decode($doctorController->createSchedule(new Request([
+            'medico_id' => '1',
+            'paciente_id' => '1',
+            'data' => $date
+        ]))->getContent());
+
+        $has_same_attributes = (
+            $result->medico_id == '1'
+            && $result->paciente_id == '1'
+            && $result->data == $date
+        );
+
+        $this->assertTrue($has_same_attributes);
+    }
 }

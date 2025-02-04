@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use App\Models\Doctor;
+use App\Models\City;
+use App\Models\Patient;
 use App\Models\Schedule;
 
 class DoctorController extends Controller
@@ -59,6 +61,13 @@ class DoctorController extends Controller
                 ], 400);
             }
 
+            $city_not_found = empty(City::find($city_id));
+            if ($city_not_found) {
+                return response()->json([
+                    'error' => 'Cidade não encontrada'
+                ], 400);
+            }
+
             $result = Doctor::create([
                 'nome' => $name,
                 'especialidade' => $speciality,
@@ -88,10 +97,9 @@ class DoctorController extends Controller
                     'error' => 'Por favor, preencha todos os campos.'
                 ], 400);
             }
-
            
             $doctor_not_found = empty(Doctor::find($doctor_id));
-            $patient_not_found = empty(Doctor::find($patient_id));
+            $patient_not_found = empty(Patient::find($patient_id));
     
             if ($doctor_not_found) {
                 return response()->json([
