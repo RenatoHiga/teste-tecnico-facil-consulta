@@ -1,66 +1,193 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Teste técnico - Fácil consulta
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Sumário
 
-## About Laravel
+-   Instalação
+-   Executando a API
+-   Executando testes automatizados
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Instalação
 
--   [Simple, fast routing engine](https://laravel.com/docs/routing).
--   [Powerful dependency injection container](https://laravel.com/docs/container).
--   Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
--   Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
--   Database agnostic [schema migrations](https://laravel.com/docs/migrations).
--   [Robust background job processing](https://laravel.com/docs/queues).
--   [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Para instalar e executar a API desenvolvida, será necessário ter instalado em sua máquina:
 
-## Learning Laravel
+-   [Docker](https://www.docker.com/get-started/)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   [Git](https://git-scm.com/)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-   [Postman](https://www.postman.com/)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   [Composer](https://getcomposer.org/)
 
-## Laravel Sponsors
+Composer é o gerenciador de pacotes do PHP para podermos instalar as dependências na máquina local.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Docker é um programa que vai conseguir executar a API, sem precisar realizar configurações extras e específicas.
 
-### Premium Partners
+Git é um programa que vai nos auxiliar no download deste projeto.
 
--   **[Vehikl](https://vehikl.com/)**
--   **[Tighten Co.](https://tighten.co)**
--   **[WebReinvent](https://webreinvent.com/)**
--   **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
--   **[64 Robots](https://64robots.com)**
--   **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
--   **[Cyber-Duck](https://cyber-duck.co.uk)**
--   **[DevSquad](https://devsquad.com/hire-laravel-developers)**
--   **[Jump24](https://jump24.co.uk)**
--   **[Redberry](https://redberry.international/laravel/)**
--   **[Active Logic](https://activelogic.com)**
--   **[byte5](https://byte5.de)**
--   **[OP.GG](https://op.gg)**
+Postman é o programa que vai nos habilitar executar requisições desta API.
 
-## Contributing
+#### Clonando o projeto
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Vamos começar instalando o projeto na sua máquina, será necessário clonar este projeto na sua máquina local, eu recomendo de preferência instale na pasta raíz "home" em caso do Linux.
 
-## Code of Conduct
+```bash
+cd ~
+git clone ...
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Em seguida vamos instalar as dependências do projeto na pasta raíz
 
-## Security Vulnerabilities
+```
+cd teste-tecnico-facil-consulta
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Executando o projeto
 
-## License
+Após a clonagem do projeto, iremos rodar o projeto via "Sail" que é uma biblioteca do Laravel que usa o Docker para gerenciar e executar os containers.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+cd teste-tecnico-facil-consulta
+./vendor/bin/sail up
+```
+
+> DICA: Caso o comando `sail up` não funcione, na maioria dos casos quando ocorre um erro, é porque tem algum programa executando na porta que o docker precisa utilizar. Por exemplo: Na porta 3306, minha máquina estava rodando o serviço de mysql ou rodando um container anterior na porta 3306, então só precisei parar de executar o serviço que estava ocupando a porta em específico.
+
+Com a API rodando via "Sail", vamos rodar as nossas migrações para criar o banco de dados no container do MySQL e popular as tabelas com dados de teste
+
+```bash
+./vendor/bin/sail artisan migrate:fresh --seed
+```
+
+## Executando a API
+
+#### Importando a coleção postman
+
+Com o Sail rodando, junto com as migrações realizadas, agora iremos acessar os endpoints via Postman. Antes de executar os endpoints no postman, precisamos fazer download da coleção e gerar uma API token para acessar os endpoints que são de acesso restrito.
+
+[Download da coleção do postman](https://www.postman.com/nova-versao-fc-teste/teste-facil-consulta/collection/3sgeuqb/pessoa-back-end-plena-laravel?action=share&creator=5226266)
+
+#### Gerando o Token de acesso
+
+Vá até Autenticação > Login, copie o conteúdo do "access_token". Em seguida vá na coleção > Editar > Cole o valor do token na coluna "current value" da variável "token".
+
+Na mesma janela de edição de variáveis da coleção, vamos trocar de "http://127.0.0.1/api" para "http://127.0.0.1:80/api", porque nossa aplicação está rodando na porta 80.
+
+Agora com o Postman configurado, podemos realizar nossas requisições
+
+## Cidade Endpoints
+
+### Listar cidades
+
+GET - /cidades
+
+Filtros:
+
+-   (Opcional) nome
+
+```
+// http://127.0.0.1:80/cidades
+[
+    {
+        "id": 3,
+        "nome": "Curitiba",
+        "estado": "PR",
+        "created_at": "2025-02-04T20:30:14.000000Z",
+        "updated_at": "2025-02-04T20:30:14.000000Z",
+        "deleted_at": null
+    },
+    {
+        "id": 1,
+        "nome": "Pelotas",
+        "estado": "RS",
+        "created_at": "2025-02-04T20:30:14.000000Z",
+        "updated_at": "2025-02-04T20:30:14.000000Z",
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "nome": "São Paulo",
+        "estado": "SP",
+        "created_at": "2025-02-04T20:30:14.000000Z",
+        "updated_at": "2025-02-04T20:30:14.000000Z",
+        "deleted_at": null
+    }
+]
+```
+
+```
+// http://127.0.0.1:80/cidades?nome=sao
+[
+    {
+        "id": 2,
+        "nome": "São Paulo",
+        "estado": "SP",
+        "created_at": "2025-02-04T20:30:14.000000Z",
+        "updated_at": "2025-02-04T20:30:14.000000Z",
+        "deleted_at": null
+    }
+]
+```
+
+## Médico Endpoints
+
+### Listar médicos
+
+GET - /medicos
+
+Filtros:
+
+-   (Opcional) nome
+
+### Listar médicos de uma cidade
+
+GET - /cidades/{{id_cidade}}/medicos
+
+### Cadastrar médico
+
+POST - /medicos
+
+Campos obrigatórios no body:
+
+-   nome
+-   especialidade
+-   cidade_id
+
+### Cadastrar consulta
+
+POST - /medicos/consulta
+
+Campos obrigatórios no body:
+
+-   medico_id
+-   paciente_id
+-   data
+
+## Paciente Endpoints
+
+### Listar pacientes
+
+GET - /medicos/{{id_medico}}/pacientes
+
+### Cadastrar paciente
+
+POST - /pacientes/{{id_paciente}}
+
+Campos obrigatórios no body:
+
+-   nome
+-   cpf
+-   celular
+
+### Atualizar paciente
+
+POST - /pacientes/{{id_paciente}}
+
+Campos obrigatórios no body:
+
+-   nome
+-   celular
+
+OBS: cpf não é um campo atualizável
