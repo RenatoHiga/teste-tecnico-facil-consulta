@@ -29,8 +29,9 @@ Route::group([
     Route::get('user', [AuthController::class, 'getMyUser']);
 
     Route::post('medicos', [DoctorController::class, 'create']);
-
+    Route::post('medicos/consulta', [DoctorController::class, 'createSchedule']);
     Route::get('medicos/{id_doctor}/pacientes', [PatientController::class, 'get']);
+    
     Route::post('pacientes', [PatientController::class, 'create']);
     Route::post('pacientes/{id_patient}', [PatientController::class, 'update']);
 });

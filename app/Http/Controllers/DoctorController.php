@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use App\Models\Doctor;
+use App\Models\Schedule;
 
 class DoctorController extends Controller
 {
@@ -68,5 +69,52 @@ class DoctorController extends Controller
         } catch (\Throwable $error) {
             return showInternalError();
         }
+    }
+
+    public function createSchedule(Request $request) {
+        try {
+            $doctor_id = $request->get('medico_id');
+            $patient_id = $request->get('paciente_id');
+            $date = $request->get('data');
+    
+            $has_any_empty_parameter = (
+                empty($doctor_id) 
+                || empty($patient_id)
+                || empty($date)
+            );
+    
+            if ($has_any_empty_parameter) {
+                return response()->json([
+                    'error' => 'Por favor, preencha todos os campos.'
+                ], 400);
+            }
+
+           
+            $doctor_not_found = empty(Doctor::find($doctor_id));
+            $patient_not_found = empty(Doctor::find($patient_id));
+    
+            if ($doctor_not_found) {
+                return response()->json([
+                    'error' => 'Mèdico não encontrado.'
+                ], 400);
+            }
+
+            if ($patient_not_found) {
+                return response()->json([
+                    'error' => 'Paciente não encontrado.'
+                ], 400);
+            }
+    
+            $result = Schedule::create([
+                'medico_id' => $doctor_id,
+                'paciente_id' => $patient_id,
+                'data' => $date
+            ]);
+
+            return response()->json($result);
+        } catch (\Throwable $error) {
+            return showInternalError();
+        }
+       
     }
 }
