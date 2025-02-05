@@ -33,5 +33,5 @@ Route::group([
     Route::get('medicos/{id_doctor}/pacientes', [PatientController::class, 'get']);
     
     Route::post('pacientes', [PatientController::class, 'create']);
-    Route::post('pacientes/{id_patient}', [PatientController::class, 'update']);
+    Route::put('pacientes/{id_patient}', [PatientController::class, 'update']);
 });

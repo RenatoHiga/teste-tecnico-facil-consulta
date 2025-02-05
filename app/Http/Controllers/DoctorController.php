@@ -25,7 +25,7 @@ class DoctorController extends Controller
             }
            
             if ($id_city_exists) {
-                $doctors->where('cidade_id', '=', $id_city);
+                $doctors = $doctors->where('cidade_id', '=', $id_city);
             }
 
             $doctors = $doctors->orderBy('nome', 'asc')->get()->all();
@@ -97,7 +97,14 @@ class DoctorController extends Controller
                     'error' => 'Por favor, preencha todos os campos.'
                 ], 400);
             }
-           
+
+            $time_is_invalid = empty(strtotime($date));
+            if ($time_is_invalid) {
+                return response()->json([
+                    'error' => 'Por favor, insira uma data válida.'
+                ], status: 400);
+            }
+
             $doctor_not_found = empty(Doctor::find($doctor_id));
             $patient_not_found = empty(Patient::find($patient_id));
     
