@@ -17,13 +17,13 @@ class DoctorSeeder extends Seeder
         Doctor::create([
             'nome' => 'Dr. Renan Fidalgo Domingues',
             'especialidade' => 'Neurologia',
-            'cidade_id' => 5
+            'cidade_id' => 2
         ]);
 
         Doctor::create([
             'nome' => 'Juliana Léia Neves Jr.',
             'especialidade' => 'Dermatologia',
-            'cidade_id' => 5
+            'cidade_id' => 1
         ]);
 
         Doctor::create([
