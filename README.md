@@ -8,6 +8,8 @@
 
 ## 🔧 Instalação
 
+> ⚠️ OBS: O arquivo .env está disponibilizado neste repositório exclusivamente para agilizar na instalação deste projeto.
+
 ### Requisitos
 
 Para instalar e executar a API desenvolvida, será necessário ter instalado em sua máquina:
@@ -46,16 +48,15 @@ composer install
 
 #### Executando o projeto
 
-Após a clonagem do projeto, iremos rodar o projeto via "Sail" que é uma biblioteca do Laravel que usa o Docker para gerenciar e executar os containers.
+Após a clonagem do projeto e considerando que já está no diretório do projeto /teste-tecnico-facil-consulta, iremos rodar o projeto via "Sail" que é uma biblioteca do Laravel que usa o Docker para gerenciar e executar os containers.
 
 ```bash
-cd teste-tecnico-facil-consulta
 ./vendor/bin/sail up
 ```
 
 > 💡 DICA: Caso o comando `sail up` não funcione, na maioria dos casos quando ocorre um erro, é porque tem algum programa executando na porta que o docker precisa utilizar. Por exemplo: Na porta 3306, minha máquina estava rodando o serviço de mysql ou rodando um container anterior na porta 3306, então só precisei parar de executar o serviço que estava ocupando a porta em específico.
 
-Com a API rodando via "Sail", vamos rodar as nossas migrações para criar o banco de dados no container do MySQL e popular as tabelas com dados de teste
+Com a API rodando via "Sail", abra uma nova janela de terminal e então vamos rodar as nossas migrações para criar o banco de dados no container do MySQL e popular as tabelas com dados de teste
 
 ```bash
 ./vendor/bin/sail artisan migrate:fresh --seed
