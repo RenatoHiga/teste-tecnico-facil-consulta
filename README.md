@@ -372,3 +372,13 @@ Resultado de exemplo:
     "updated_at": "2025-02-05T10:40:59.000000Z"
 }
 ```
+
+## 👷 Executando testes
+
+Para executar os testes feitos em PHP Unit, basta estar no diretório do projeto e rodar o comando abaixo:
+
+```bash
+./vendor/bin/sail test
+```
+
+No total há 13 testes, nos quais testam as funções dos endpoints como: Geração de token, Cidade, Mèdico, Paciente
