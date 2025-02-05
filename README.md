@@ -56,6 +56,10 @@ Após a clonagem do projeto e considerando que já está no diretório do projet
 
 > 💡 DICA: Caso o comando `sail up` não funcione, na maioria dos casos quando ocorre um erro, é porque tem algum programa executando na porta que o docker precisa utilizar. Por exemplo: Na porta 3306, minha máquina estava rodando o serviço de mysql ou rodando um container anterior na porta 3306, então só precisei parar de executar o serviço que estava ocupando a porta em específico.
 
+> ⚠️ OBS: Algumas vezes o container do MySQL pode iniciar com problema de conexão, mas após alguns minutos, o container reinicializa o MySQL e a conexão inicia corretamente. Portanto pode haver diversos logs de aviso no começo, mas após aguardar, o container volta a funcionar normalmente como na foto abaixo. Quando aparecer "/usr/sbin/mysqld: ready for connections", já será possível realizar as migrações.
+
+![2025-02-05_13-34](https://github.com/user-attachments/assets/e611f011-6f8b-442c-b750-c8e0b93d2319)
+
 Com a API rodando via "Sail", abra uma nova janela de terminal e então vamos rodar as nossas migrações para criar o banco de dados no container do MySQL e popular as tabelas com dados de teste
 
 ```bash
